@@ -1,18 +1,52 @@
-// src/components/App.jsx
-
+import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "path/to/pages/Home";
-import About from "path/to/pages/About";
-import Products from "path/to/pages/Products";
+import { lazy, Suspense } from "react";
+// import css from "./App.module.css";
+// import clsx from "clsx";
+
+const HomePage = lazy(() => import("./pages/Home/HomePage"));
+const MoviesPage = lazy(() => import("./pages/MoviesPage/MoviesPage"));
+const MovieCast = lazy(() => import("./components/MovieCast/MovieCast"));
+const Navigation = lazy(() => import("./components/Navigation/Navigation"));
+const MovieDetailsPage = lazy(() =>
+  import("./pages/MovieDetailsPage/MovieDetailsPage")
+);
+const MovieReviews = lazy(() =>
+  import("./components/MovieReviews/MovieReviews")
+);
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
+//const About = lazy(() => import("./pages/About/About"));
 
 export const App = () => {
   return (
     <div>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/products" element={<Products />} />
-      </Routes>
+      <Navigation />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/movies" element={<MoviesPage />} />
+          <Route path="/movies/:movieId" element={<MovieDetailsPage />}>
+            <Route path="cast" element={<MovieCast />} />
+            <Route path="reviews" element={<MovieReviews />} />
+          </Route>
+          {/* <Route path="/about" element={<About />} /> */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 };
+
+export default App;
+
+// import React from "react";
+// import { Routes, Route } from "react-router-dom";
+// import { lazy, Suspense } from "react";
+// // import css from "./App.module.css";
+// // import clsx from "clsx";
+
+// export const App = () => {
+//   return <div></div>;
+// };
+
+// export default App;
